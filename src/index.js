@@ -1,26 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import React, { createContext } from 'react';
+import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import { createContext } from 'react';
-import UserStore from './client/store/userstore';
-import GameStore from './client/store/gamestore';
+import UserStore from './client/store/userStore';
+import GameStore from './client/store/gameStore';
+import {App} from './App'
 
+export const Context = createContext(null);
 
-const context = createContext(null);
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <context.Provider value={{
+ReactDOM.render(
+  <Context.Provider value={{
     user: new UserStore(),
     game: new GameStore()
   }}>
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-  </context.Provider>
+    <App/>
+  </Context.Provider>,
+  document.getElementById('root')
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals

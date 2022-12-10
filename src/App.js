@@ -1,27 +1,25 @@
-import { observer } from 'mobx-react-lite';
-import './App.css';
-import {MainPage} from './client/pages/MainPage';
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
-import { About } from './client/pages/About';
-import { GamePage } from './client/pages/GamePage';
+import { observer } from "mobx-react-lite";
+import { useContext, useEffect } from "react";
+import { BrowserRouter as Router } from 'react-router-dom';
+import { Context } from ".";
+import Content from './client/Content/Content';
+import { checkAuth } from "./client/http/userAPI";
 
 
+export const App = observer(()=>{
+  const {user} = useContext(Context);
 
-const App = observer(()=> {
-  return (
-    <BrowserRouter>
-    <Routes>
-      <Route path='/' element={<MainPage></MainPage>}>
-      </Route>
-      <Route path='/about' element={<About></About>}>
-      </Route>
-      <Route path='/game/:id' element={<GamePage></GamePage>}>
-      </Route>
-      <Route path='*' element={<h1 style={{fontSize:'32px', margin:'7px'}}>404</h1>}>
-      </Route>
-    </Routes>
-    </BrowserRouter>
-  );
+  useEffect(()=> {  
+    checkAuth().then(data => {
+      console.log(data);
+      user.setUser(data);
+      user.setIsAuth(true);
+    })
+  })
+
+  return(
+    <Router>
+      <Content/>
+    </Router>
+  )
 })
-
-export default App;
