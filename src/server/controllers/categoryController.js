@@ -1,4 +1,5 @@
 const {Category} = require('../models');
+const ApiError = require('../error/apiError');
 
 class CategoryController {
   async addCategory(req, res) {
@@ -7,13 +8,11 @@ class CategoryController {
     return res.json(category);
   };
 
-  async getCategory(req, res) {
+  async getCategory(req, res, next) {
     const {id} = req.params;
     const category = await Category.findOne({where: {id}});
     if (!category) {
-      return res.status(400).json({
-        message: 'Category ID is invalid',
-      });
+      return next(ApiError.badRequest('Category ID is invalid'));
     }
     return res.json(category);
   };
@@ -23,13 +22,11 @@ class CategoryController {
     return res.json(years);
   };
 
-  async deleteCategory(req, res) {
+  async deleteCategory(req, res, next) {
     const {id} = req.params;
     const category = await Category.findOne({where: {id}});
     if (!category) {
-      return res.status(400).json({
-        message: 'Category ID is invalid',
-      });
+      return next(ApiError.badRequest('Category ID is invalid'));
     }
     await Category.destroy({where: {id}});
     return res.json({message: `${category.name} was deleted`});

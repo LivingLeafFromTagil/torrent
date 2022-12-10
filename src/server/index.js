@@ -1,20 +1,23 @@
+require('dotenv').config();
 const express = require('express');
-const cors = require('cors');
 const sequelize = require('./db');
 const models = require('./models');
 const router = require('./routes');
-require('dotenv').config();
+const cors = require('cors');
+const errorHandler = require('./middleware/errorHandlerMiddleware');
 
-const app = express();
 const PORT = process.env.PORT || 5757;
-
-app.get('/', (req, res) => res.status(200).json({
-  message: 'server initialized',
-}));
-
+const app = express();
 app.use(cors());
 app.use(express.json());
 app.use('/api', router);
+app.use(errorHandler);
+
+app.get('/', (req, res) => {
+  res.status(200).json({
+    message: 'server initialized',
+  })
+});
 
 const start = async() => {
   try {

@@ -1,7 +1,8 @@
 const {Game} = require('../models');
+const ApiError = require('../error/apiError');
 
 class GameController {
-  async addGame(req, res) {
+  async addGame(req, res, next) {
     try {
       const {name, info, developerId, yearId, categoryId, ref} = req.body;
       const game = await Game.create({
@@ -14,36 +15,48 @@ class GameController {
       });
       return res.json(game);
     } catch(e) {
-      return res.status(400).json({
-        message: 'Try to create object again',
-      });
+      next(ApiError.badRequest(e.message));
     }
   }
 
-  async getGames(req, res) {
+  async getGames(req, res, next) {
+    let {developerId, yearId, categoryId} = req.query;
     let games;
-    games = await Game.findAll();
-    return res.json(games);
+    if (!developerId && !yearId && !categoryId) {
+      games = await Game.findAll();
+      return res.json(games);
+    }
+    else if (developerId && !yearId && !categoryId) {
+      games = await Game.findAll({where:{developerId}});
+      return res.json(games);
+    }
+    else if (!developerId && yearId && !categoryId) {
+      games = await Game.findAll({where: {yearId}});
+      return res.json(games);
+    }
+    else if (!developerId && !yearId && categoryId) {
+      games = await Game.findAll({where: {categoryId}});
+      return res.json(games);
+    }
+    else {
+      next(ApiError.badRequest)
+    }
   }
 
-  async getGame(req, res) {
+  async getGame(req, res, next) {
     const {id} = req.params;
     const game = await Game.findOne({where: {id}});
     if (!game) {
-      return res.status(400).json({
-        message: 'Invalid ID',
-      });
+      return next(ApiError.badRequest('Invalid ID'));
     }
     return res.json(game);
   }
 
-  async deleteGame(req, res) {
+  async deleteGame(req, res, next) {
     const {id} = req.params;
     const game = await Game.findOne({where: {id}});
     if (!game) {
-      return res.status(400).json({
-        message: 'Invalid ID',
-      });
+      return next(ApiError.badRequest('Invalid ID'));
     }
     await Game.destroy({where:{id}});
     return res.json({message: `${game.name} was deleted`});

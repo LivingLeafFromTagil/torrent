@@ -1,4 +1,5 @@
 const {Developer} = require('../models')
+const ApiError = require('../error/apiError');
 
 class DeveloperController {
   async addDeveloper(req, res) {
@@ -7,13 +8,11 @@ class DeveloperController {
     return res.json(developer);
   };
 
-  async getDeveloper(req, res) {
+  async getDeveloper(req, res, next) {
     const {id} = req.params;
     const dev = await Developer.findOne({where: {id}});
     if (!dev) {
-      return res.status(400).json({
-        message: 'Developer ID is invalid',
-      });
+      return next(ApiError.badRequest('Category ID is invalid'));
     }
     return res.json(dev);
   };
