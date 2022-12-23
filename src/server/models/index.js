@@ -12,7 +12,7 @@ const Game = sequelize.define('game', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
   name: {type: DataTypes.STRING, unique: true},
   info: {type: DataTypes.STRING, unique: true},
-  ref: {type: DataTypes.STRING, unique: true}
+  ref: {type: DataTypes.STRING, unique: true},
 });
 
 const Category = sequelize.define('category', {

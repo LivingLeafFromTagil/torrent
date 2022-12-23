@@ -6,8 +6,9 @@ export const addGame = async(game) => {
     info: game.info, 
     developerId: game.developerId, 
     yearId: game.yearId, 
-    categoryId: game.categoryId, 
-    ref: game.ref
+    categoryId: game.categoryId,
+    userId: game.userId, 
+    ref: game.ref,
   });
   return data;
 }
@@ -40,5 +41,10 @@ export const getCategories = async() => {
 
 export const getDevelopers = async() => {
   const {data} = await $host.get('api/developer');
+  return data;
+}
+
+export const getUsers = async() => {
+  const {data} = await $host.get('api/user/users');
   return data;
 }

@@ -4,14 +4,24 @@ const ApiError = require('../error/apiError');
 class GameController {
   async addGame(req, res, next) {
     try {
-      const {name, info, developerId, yearId, categoryId, ref} = req.body;
+      const {
+        name, 
+        info, 
+        developerId, 
+        yearId, 
+        categoryId, 
+        userId, 
+        ref,
+      } = req.body;
+
       const game = await Game.create({
         name, 
         info, 
         developerId, 
         yearId, 
         categoryId, 
-        ref
+        userId,
+        ref,
       });
       return res.json(game);
     } catch(e) {

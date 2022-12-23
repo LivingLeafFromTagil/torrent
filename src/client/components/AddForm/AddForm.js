@@ -6,7 +6,7 @@ import { Context } from '../../..';
 
 //Компонент-форма для добавления организаций
 export const AddForm = observer((props)=>{
-  const {game} = useContext(Context);
+  const {game, user} = useContext(Context);
   const [name, setName] = useState('');
   const [yearId, setYear] = useState();
   const [developerId, setDeveloper] = useState('');
@@ -61,8 +61,9 @@ export const AddForm = observer((props)=>{
           info, 
           developerId, 
           yearId, 
-          categoryId, 
-          ref
+          categoryId,
+          userId: user.user.id, 
+          ref,
           }).then(() => {
             getGameList().then((data) => {
               console.log(data);

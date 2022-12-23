@@ -6,7 +6,7 @@ import Wrapper from '../Wrapper/Wrapper';
 import bkgr from '../../img/background.jpg';
 import { Context } from '../../..';
 import { observer } from 'mobx-react-lite';
-import { getGameList, getYears, getCategories, getDevelopers } from '../../http/gameAPI';
+import { getGameList, getYears, getCategories, getDevelopers, getUsers } from '../../http/gameAPI';
 
 
 //Страница списка, основная
@@ -19,6 +19,7 @@ export const GameList = observer(() => {
     getYears().then(data => game.setYears(data));
     getCategories().then(data => game.setCategories(data));
     getDevelopers().then(data => game.setDevelopers(data));
+    getUsers().then(data => game.setUsers(data));
   }, [game.games.length]);
 
   const showForm = () => {

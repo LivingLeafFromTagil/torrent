@@ -7,6 +7,11 @@ const generateJWT = (id, email, role) => {
   return jwt.sign({id, email, role}, process.env.SEC_KEY, {expiresIn: '24h'});
 }
 class UserController {
+  async getUsers(req, res) {
+    const users = await User.findAll();
+    return res.json(users);
+  }
+
   //регистрация
   async registration(req, res, next) {
     const {email, password, role} = req.body;
